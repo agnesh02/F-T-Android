@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    EditText etEmail, etPassword;
+    EditText etEmail, etPassword, etConfirmPassword, etDob, etContact;
     Button btnRegister;
     FirebaseAuth auth;
 
@@ -31,20 +31,35 @@ public class RegistrationActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
+        etConfirmPassword = findViewById(R.id.et_confirm_password);
+        etDob = findViewById(R.id.et_dob);
+        etContact = findViewById(R.id.et_contact);
+
         btnRegister = findViewById(R.id.register_button);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RegisterUser();
+                String sEmail = etEmail.getText().toString();
+                String sPass = etPassword.getText().toString();
+                String sConfirmPass = etConfirmPassword.getText().toString();
+
+                validateFieldsAndRegister(sEmail, sPass, sConfirmPass);
             }
         });
     }
 
-    public void RegisterUser() {
-        String sEmail = etEmail.getText().toString();
-        String sPass = etPassword.getText().toString();
-        auth.createUserWithEmailAndPassword(sEmail, sPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+    public void validateFieldsAndRegister(String email, String pass, String confirmPass) {
+        if (!pass.equals(confirmPass)) {
+            Toast.makeText(this, "Passwords does not match", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        registerUser(email, pass);
+    }
+
+    public void registerUser(String email, String pass) {
+
+        auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
