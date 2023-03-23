@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "433310800532",
+    "project_id": "firet-e3c54",
+    "storage_bucket": "firet-e3c54.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433310800532:android:60df864440e01b5c3eb281",
+        "android_client_info": {
+          "package_name": "com.example.firebasetutorial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "433310800532-emvlvkccsshj2545ilj6sm30941p3lo8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP9zbizF1ipfPVXxP1PhaL-NQaFOdI1Wc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "433310800532-emvlvkccsshj2545ilj6sm30941p3lo8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
