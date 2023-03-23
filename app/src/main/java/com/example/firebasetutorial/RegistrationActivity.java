@@ -3,11 +3,13 @@ package com.example.firebasetutorial;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,6 +26,7 @@ public class RegistrationActivity extends AppCompatActivity {
     Button btnRegister;
     FirebaseAuth auth;
     FirebaseFirestore firestore;
+    TextView goToLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class RegistrationActivity extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.et_confirm_password);
         etDob = findViewById(R.id.et_dob);
         etContact = findViewById(R.id.et_contact);
+        goToLogin = findViewById(R.id.tv_go_to_login);
 
         btnRegister = findViewById(R.id.register_button);
 
@@ -55,6 +59,15 @@ public class RegistrationActivity extends AppCompatActivity {
                 validateFieldsAndRegister(sUsername, sEmail, sPass, sConfirmPass, sDob, sContact);
             }
         });
+
+        goToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
+                startActivity(i);
+            }
+        });
+
     }
 
     public void validateFieldsAndRegister(String username, String email, String pass, String confirmPass, String dob, String contact) {
