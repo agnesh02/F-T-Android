@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,11 +21,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Button btnFetchData;
+    Button btnFetchData, btnUpdateContact;
     FirebaseFirestore firestore;
     FirebaseAuth auth;
     FirebaseUser firebaseUser;
     TextView tvData;
+    EditText etContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,28 +38,66 @@ public class HomeActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
 
         tvData = findViewById(R.id.tv_data);
+        etContact = findViewById(R.id.et_update_contact);
         btnFetchData = findViewById(R.id.btn_fetch_data);
-
+        btnUpdateContact = findViewById(R.id.btn_update_data);
 
         btnFetchData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firestore.collection("USERS").document(firebaseUser.getEmail()).get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                User obj = documentSnapshot.toObject(User.class);
-                                tvData.setText(obj.getUsername()+'\n'+obj.getDob()+'\n'+obj.getContact());
-                                Toast.makeText(HomeActivity.this, "Data has been fetched successfully", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(HomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                fetchData();
             }
         });
+
+        btnUpdateContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newInfo = etContact.getText().toString().trim();
+                validateAndUpdate(newInfo);
+            }
+        });
+
+    }
+
+    public void fetchData() {
+        firestore.collection("USERS").document(firebaseUser.getEmail()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User obj = documentSnapshot.toObject(User.class);
+                        tvData.setText(obj.getUsername() + '\n' + obj.getDob() + '\n' + obj.getContact());
+                        Toast.makeText(HomeActivity.this, "Data has been fetched successfully", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(HomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void validateAndUpdate(String newContact) {
+        if (newContact.equals("")) {
+            etContact.setError("This field is required");
+            return;
+        }
+        firestore.collection("USERS").document(firebaseUser.getEmail()).update("contact", newContact)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(HomeActivity.this, "Contact details has been updated successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(HomeActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(HomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 }
