@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    EditText etEmail, etPassword, etConfirmPassword, etDob, etContact;
+    EditText etUsername, etEmail, etPassword, etConfirmPassword, etDob, etContact;
     Button btnRegister;
     FirebaseAuth auth;
 
@@ -29,6 +29,7 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         auth = FirebaseAuth.getInstance();
+        etUsername = findViewById(R.id.et_username);
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
         etConfirmPassword = findViewById(R.id.et_confirm_password);
@@ -40,18 +41,33 @@ public class RegistrationActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String sEmail = etEmail.getText().toString();
-                String sPass = etPassword.getText().toString();
-                String sConfirmPass = etConfirmPassword.getText().toString();
+                String sUsername = etUsername.getText().toString().trim();
+                String sEmail = etEmail.getText().toString().trim();
+                String sPass = etPassword.getText().toString().trim();
+                String sConfirmPass = etConfirmPassword.getText().toString().trim();
+                String sDob = etDob.getText().toString().trim();
+                String sContact = etContact.getText().toString().trim();
 
-                validateFieldsAndRegister(sEmail, sPass, sConfirmPass);
+                validateFieldsAndRegister(sUsername, sEmail, sPass, sConfirmPass, sDob, sContact);
             }
         });
     }
 
-    public void validateFieldsAndRegister(String email, String pass, String confirmPass) {
+    public void validateFieldsAndRegister(String username, String email, String pass, String confirmPass, String dob, String contact) {
         if (!pass.equals(confirmPass)) {
-            Toast.makeText(this, "Passwords does not match", Toast.LENGTH_SHORT).show();
+            etConfirmPassword.setError("Passwords does not match");
+            return;
+        }
+        if (username.equals("")) {
+            etUsername.setError("This field is required");
+            return;
+        }
+        if (dob.equals("")) {
+            etDob.setError("This field is required");
+            return;
+        }
+        if (contact.equals("")) {
+            etContact.setError("This field is required");
             return;
         }
         registerUser(email, pass);
