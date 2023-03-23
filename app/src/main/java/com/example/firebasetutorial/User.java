@@ -4,6 +4,9 @@ public class User {
 
     String username, email, dob, contact;
 
+    public User() {
+    }
+
     public User(String username, String email, String dob, String contact) {
         this.username = username;
         this.email = email;
