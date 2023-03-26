@@ -1,4 +1,4 @@
-# Firebase Auth + CRUD - Tutorial Android (Java)
+# Firebase - Authentication + CRUD - Tutorial Android (Java)
 
 - This code is just for easy understanding about the topic / concept.
 - This code is written in such a manner that it is easy to understand.
